@@ -86,13 +86,16 @@ resource "aws_s3_bucket" "log" {
 
   bucket = "tf-log-${local.name_prefix}"
   tags   = local.tags
+}
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = var.kms_key_id
-        sse_algorithm     = "aws:kms"
-      }
+resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
+  count  = var.enable_tf_bucket ? 1 : 0
+  bucket = aws_s3_bucket.log[0].bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = var.kms_key_id
+      sse_algorithm     = "aws:kms"
     }
   }
 }
