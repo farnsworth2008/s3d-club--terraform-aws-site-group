@@ -36,7 +36,7 @@ locals {
 
 module "ec2_work" {
   count  = var.enable_ec2 ? 1 : 0
-  source = "github.com/s3d-club/terraform-aws-ec2?ref=v0.1.19"
+  source = "github.com/s3d-club/terraform-aws-ec2?ref=v0.1.20"
 
   domain        = var.domain
   egress_cidr6s = var.egress_cidr6s
@@ -69,7 +69,7 @@ module "name" {
 # tfsec:ignore:aws-ec2-no-public-ingress-sgr
 module "sg_ingress_open" {
   count  = var.cidrs == null ? 0 : 1
-  source = "github.com/s3d-club/terraform-aws-sg_ingress_open?ref=v0.1.6"
+  source = "github.com/s3d-club/terraform-aws-sg_ingress_open?ref=v0.1.7"
 
   cidr        = var.cidrs
   cidr6       = var.cidr6s
