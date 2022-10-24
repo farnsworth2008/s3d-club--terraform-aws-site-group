@@ -52,14 +52,14 @@ module "ec2_work" {
 
 module "ecr" {
   for_each = toset(var.ecrs)
-  source   = "github.com/s3d-club/terraform-aws-ecr?ref=v0.1.8"
+  source   = "github.com/s3d-club/terraform-aws-ecr?ref=v0.1.9"
 
   kms_key_arn = local.kms_key_arn
   name_prefix = each.key
 }
 
 module "name" {
-  source = "github.com/s3d-club/terraform-external-name?ref=0.1.9-s3d-1001"
+  source = "github.com/s3d-club/terraform-external-name?ref=v0.1.9"
 
   context = var.name
   path    = path.module
