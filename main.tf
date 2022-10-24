@@ -69,7 +69,7 @@ module "name" {
 # tfsec:ignore:aws-ec2-no-public-ingress-sgr
 module "sg_ingress_open" {
   count  = var.cidrs == null ? 0 : 1
-  source = "github.com/s3d-club/terraform-aws-sg_ingress_open?ref=v0.1.7"
+  source = "github.com/s3d-club/terraform-aws-sg_ingress_open?ref=v0.1.8"
 
   cidr        = var.cidrs
   cidr6       = var.cidr6s

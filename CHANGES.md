@@ -8,5 +8,5 @@ Recently completed and planned work is tracked here.
 - Updated `hashicorp/aws` provider
 - Updated modules
 
-## [0.1.28-s3d-1002](.)
+## [0.1.28-s3d-1003](.)
 - Added `terraform.tf`
