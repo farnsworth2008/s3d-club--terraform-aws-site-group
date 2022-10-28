@@ -13,5 +13,5 @@ Recently completed and planned work is tracked here.
 - Updated `ecr` module
 - Updated `sg_ingress_open` module
 
-## [0.1.32-s3d-1008](.)
+## [0.1.32-s3d-1009](.)
 - Added `s3d-flow-json` in `changes` module
