@@ -17,6 +17,6 @@ Recently completed and planned work is tracked here.
 ## [0.1.34](.)
 - Changed to use `aws_s3_bucket_logging` resource
 
-## [0.1.35-s3d-1011](.)
+## [0.1.35-s3d-1012](.)
 - Added `aws_s3_bucket_server_side_encryption_configuration` resource
 - Sorted code
