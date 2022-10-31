@@ -2,141 +2,141 @@ variable "az_blacklist" {
   default = []
   type    = list(string)
 
-  description = <<-END
+  description = <<-EOT
     A list of avalibility zones that should not be used.
-    END
-}
-
-variable "cidrs" {
-  default = null
-  type    = list(string)
-
-  description = <<-END
-    A list of CIDRs.
-    END
+    EOT
 }
 
 variable "cidr6s" {
   default = []
   type    = list(string)
 
-  description = <<-END
+  description = <<-EOT
     A list of CIDRs.
-    END
+    EOT
+}
+
+variable "cidrs" {
+  default = null
+  type    = list(string)
+
+  description = <<-EOT
+    A list of CIDRs.
+    EOT
 }
 
 variable "domain" {
   default = null
   type    = string
 
-  description = <<-END
+  description = <<-EOT
     A domain that already has a route 53 hosted zone.
-    END
-}
-
-variable "ecrs" {
-  default = []
-  type    = list(string)
-
-  description = <<-END
-    A list of names for the ECR instances.
-    END
+    EOT
 }
 
 variable "ec2_key_name" {
   default = null
   type    = string
 
-  description = <<-END
+  description = <<-EOT
     An ec2 key name.
-    END
+    EOT
 }
 
-variable "egress_cidrs" {
-  default = null
+variable "ecrs" {
+  default = []
   type    = list(string)
 
-  description = <<-END
-    A list of addresses for open egress.
-    END
+  description = <<-EOT
+    A list of names for the ECR instances.
+    EOT
 }
 
 variable "egress_cidr6s" {
   default = []
   type    = list(string)
 
-  description = <<-END
+  description = <<-EOT
     A list of addresses for open egress.
-    END
+    EOT
+}
+
+variable "egress_cidrs" {
+  default = null
+  type    = list(string)
+
+  description = <<-EOT
+    A list of addresses for open egress.
+    EOT
 }
 
 variable "enable_ec2" {
   default = false
   type    = bool
 
-  description = <<-END
+  description = <<-EOT
     An option to enable the EC2 instance.
-    END
+    EOT
 }
 
 variable "enable_tf_bucket" {
   default = false
   type    = bool
 
-  description = <<-END
+  description = <<-EOT
     An option that enables the creation of an S3 Bucket for storage of Terraform state.
-    END
+    EOT
 }
 
 variable "enable_tf_lock_table" {
   default = false
   type    = bool
 
-  description = <<-END
+  description = <<-EOT
     An option that enables the creation of a DynamoDB table for Terraform locks.
-    END
+    EOT
 }
 
 variable "kms_key_id" {
   type = string
 
-  description = <<-END
+  description = <<-EOT
     The ID of a KMS key.
-    END
+    EOT
 }
 
 variable "name" {
   type = string
 
-  description = <<-END
+  description = <<-EOT
     A logical name for the site group and prefix for the associated resource names.
-    END
+    EOT
 }
 
 variable "public_subnets" {
   default = null
   type    = list(string)
 
-  description = <<-END
+  description = <<-EOT
     A list of subnets where instances that should be public may be placed. Or
     the value `null` if a random subnet should be used.
-    END
+    EOT
 }
 
 variable "tags" {
   default = {}
   type    = map(string)
 
-  description = <<-END
+  description = <<-EOT
     A map of tags for resources.
-    END
+    EOT
 }
 
 variable "vpc_id" {
   default = null
   type    = string
 
-  description = <<-END
+  description = <<-EOT
     A VPC ID.
-    END
+    EOT
 }
