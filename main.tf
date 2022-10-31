@@ -33,7 +33,7 @@ locals {
 
 module "ec2_work" {
   count  = var.enable_ec2 ? 1 : 0
-  source = "github.com/s3d-club/terraform-aws-ec2?ref=v0.1.26"
+  source = "github.com/s3d-club/terraform-aws-ec2?ref=0.1.27-1000"
 
   domain        = var.domain
   egress_cidr6s = var.egress_cidr6s
@@ -49,7 +49,7 @@ module "ec2_work" {
 
 module "ecr" {
   for_each = toset(var.ecrs)
-  source   = "github.com/s3d-club/terraform-aws-ecr?ref=v0.1.15"
+  source   = "github.com/s3d-club/terraform-aws-ecr?ref=0.1.16-1000"
 
   kms_key_arn = local.kms_key_arn
   name_prefix = each.key
@@ -57,7 +57,7 @@ module "ecr" {
 }
 
 module "name" {
-  source = "github.com/s3d-club/terraform-external-name?ref=v0.1.14"
+  source = "github.com/s3d-club/terraform-external-name?ref=0.1.15-1000"
 
   context = var.name
   path    = path.module
@@ -67,103 +67,13 @@ module "name" {
 # tfsec:ignore:aws-ec2-no-public-ingress-sgr
 module "sg_ingress_open" {
   count  = var.cidrs == null ? 0 : 1
-  source = "github.com/s3d-club/terraform-aws-sg_ingress_open?ref=v0.1.12"
+  source = "github.com/s3d-club/terraform-aws-sg_ingress_open?ref=0.1.13-1000"
 
   cidrs       = var.cidrs
   cidr6s      = var.cidr6s
   vpc_id      = var.vpc_id
   name_prefix = local.name_prefix
   tags        = local.tags
-}
-
-# We can't log the logging bucket
-#   tfsec:ignore:aws-s3-enable-bucket-logging
-#   tfsec:ignore:aws-s3-enable-versioning
-resource "aws_s3_bucket" "log" {
-  count = var.enable_tf_bucket ? 1 : 0
-
-  bucket = "tf-log-${local.name_prefix}"
-  tags   = local.tags
-}
-
-resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
-  count  = var.enable_tf_bucket ? 1 : 0
-  bucket = aws_s3_bucket.log[0].bucket
-
-  rule {
-    apply_server_side_encryption_by_default {
-      kms_master_key_id = var.kms_key_id
-      sse_algorithm     = "aws:kms"
-    }
-  }
-}
-
-resource "aws_s3_bucket" "this" {
-  count = var.enable_tf_bucket ? 1 : 0
-
-  bucket = "tf-${local.name_prefix}"
-  tags   = local.tags
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = var.kms_key_id
-        sse_algorithm     = "aws:kms"
-      }
-    }
-  }
-}
-
-resource "aws_s3_bucket_logging" "this" {
-  count  = var.enable_tf_bucket ? 1 : 0
-  bucket = aws_s3_bucket.this[0].id
-
-  target_bucket = aws_s3_bucket.log[0].id
-  target_prefix = "log/"
-}
-
-resource "aws_s3_bucket_acl" "log" {
-  count = var.enable_tf_bucket ? 1 : 0
-
-  acl    = "private"
-  bucket = aws_s3_bucket.log[0].id
-}
-
-resource "aws_s3_bucket_public_access_block" "log" {
-  count = var.enable_tf_bucket ? 1 : 0
-
-  bucket                  = aws_s3_bucket.log[0].id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
-resource "aws_s3_bucket_acl" "this" {
-  count = var.enable_tf_bucket ? 1 : 0
-
-  acl    = "private"
-  bucket = aws_s3_bucket.this[0].id
-}
-
-resource "aws_s3_bucket_public_access_block" "this" {
-  count = var.enable_tf_bucket ? 1 : 0
-
-  bucket                  = aws_s3_bucket.this[0].id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
-resource "aws_s3_bucket_versioning" "this" {
-  count = var.enable_tf_bucket ? 1 : 0
-
-  bucket = aws_s3_bucket.this[0].id
-
-  versioning_configuration {
-    status = "Enabled"
-  }
 }
 
 # We do not need recovery for the locks
@@ -184,5 +94,86 @@ resource "aws_dynamodb_table" "this" {
   server_side_encryption {
     enabled     = true
     kms_key_arn = local.kms_key_arn
+  }
+}
+
+# We can't log the logging bucket
+#   tfsec:ignore:aws-s3-enable-bucket-logging
+#   tfsec:ignore:aws-s3-enable-versioning
+resource "aws_s3_bucket" "log" {
+  count = var.enable_tf_bucket ? 1 : 0
+
+  bucket = "tf-log-${local.name_prefix}"
+  tags   = local.tags
+}
+
+resource "aws_s3_bucket" "this" {
+  count = var.enable_tf_bucket ? 1 : 0
+
+  bucket = "tf-${local.name_prefix}"
+  tags   = local.tags
+}
+
+resource "aws_s3_bucket_acl" "log" {
+  count = var.enable_tf_bucket ? 1 : 0
+
+  acl    = "private"
+  bucket = aws_s3_bucket.log[0].id
+}
+
+resource "aws_s3_bucket_acl" "this" {
+  count = var.enable_tf_bucket ? 1 : 0
+
+  acl    = "private"
+  bucket = aws_s3_bucket.this[0].id
+}
+
+resource "aws_s3_bucket_logging" "this" {
+  count  = var.enable_tf_bucket ? 1 : 0
+  bucket = aws_s3_bucket.this[0].id
+
+  target_bucket = aws_s3_bucket.log[0].id
+  target_prefix = "log/"
+}
+
+resource "aws_s3_bucket_public_access_block" "log" {
+  count = var.enable_tf_bucket ? 1 : 0
+
+  bucket                  = aws_s3_bucket.log[0].id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_public_access_block" "this" {
+  count = var.enable_tf_bucket ? 1 : 0
+
+  bucket                  = aws_s3_bucket.this[0].id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
+  count  = var.enable_tf_bucket ? 1 : 0
+  bucket = aws_s3_bucket.log[0].bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = var.kms_key_id
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_versioning" "this" {
+  count = var.enable_tf_bucket ? 1 : 0
+
+  bucket = aws_s3_bucket.this[0].id
+
+  versioning_configuration {
+    status = "Enabled"
   }
 }
