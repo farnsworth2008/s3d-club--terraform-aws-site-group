@@ -33,7 +33,7 @@ locals {
 
 module "ec2_work" {
   count  = var.enable_ec2 ? 1 : 0
-  source = "github.com/s3d-club/terraform-aws-ec2?ref=0.1.28-s3d-1003"
+  source = "github.com/s3d-club/terraform-aws-ec2?ref=0.1.28-s3d-1004"
 
   domain        = var.domain
   egress_cidr6s = var.egress_cidr6s
