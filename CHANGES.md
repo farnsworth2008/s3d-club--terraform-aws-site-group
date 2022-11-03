@@ -14,5 +14,5 @@ Recently completed and planned work is tracked here.
 - Changed from `END` to `EOT` for heredocs in `variables.tf`
 - Fixed sort order for `variables.tf`
 
-## [0.1.39-s3d-1004](.)
+## [0.1.39-s3d-1005](.)
 - Updated `ec2_work` module
