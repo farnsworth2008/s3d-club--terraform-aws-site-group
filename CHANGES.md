@@ -13,3 +13,6 @@ This file describes the project history as it relates to tagged versions.
 
 ## [0.1.46](.) to [0.1.47](.)
 - Updated `aws` provider
+
+## [0.1.48-1000](.)
+- Added `aws_iam_user` resource

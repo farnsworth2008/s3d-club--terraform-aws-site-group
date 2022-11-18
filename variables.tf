@@ -70,6 +70,16 @@ variable "egress_cidrs" {
     EOT
 }
 
+variable "enable_admin_iam_user" {
+  default = false
+  type    = bool
+
+  description = <<-EOT
+    An option to enable an IAM user intended for adminstration of the site
+    group.
+    EOT
+}
+
 variable "enable_ec2" {
   default = false
   type    = bool

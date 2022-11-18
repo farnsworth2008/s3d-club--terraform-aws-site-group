@@ -97,6 +97,14 @@ resource "aws_dynamodb_table" "this" {
   }
 }
 
+resource "aws_iam_user" "this" {
+  count = var.enable_admin_iam_user ? 1 : 0
+
+  name          = "${module.name.prefix}-admin"
+  force_destroy = true
+  tags          = module.name.tags
+}
+
 # We can't log the logging bucket
 #   tfsec:ignore:aws-s3-enable-bucket-logging
 #   tfsec:ignore:aws-s3-enable-versioning
